@@ -6,12 +6,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.brian.ticketing_app.common.exception.ExceptionClasses.TicketNotFoundException;
+import com.brian.ticketing_app.common.exception.ExceptionClasses.UserNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(TicketNotFoundException.class)
     public ResponseEntity<String> handleTicketNotFoundException(TicketNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }
