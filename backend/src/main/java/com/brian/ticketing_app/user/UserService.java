@@ -2,8 +2,8 @@ package com.brian.ticketing_app.user;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.brian.ticketing_app.common.exception.ExceptionClasses.TicketNotFoundException;
@@ -25,12 +25,13 @@ import lombok.Setter;
 public class UserService {
     private final UserRepository userRepository;
     private final TicketRepository ticketRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void createUser(CreateUserRequestDTO createUserRequestDTO) {
         User user = User.builder()
             .username(createUserRequestDTO.getUsername())
             .email(createUserRequestDTO.getEmail())
-            .password(createUserRequestDTO.getPassword())
+            .password(passwordEncoder.encode(createUserRequestDTO.getPassword()))
             .userRole(createUserRequestDTO.getUserRole())
             .isActive(true)
             .createdAt(LocalDateTime.now())
@@ -45,11 +46,11 @@ public class UserService {
     }
 
     public List<Ticket> getTickets(Long id) {
-        Optional<List<Ticket>> tickets = ticketRepository.findByUserId(id);
+        List<Ticket> tickets = ticketRepository.findByTicketOwner_Id(id);
         if (tickets.isEmpty()) {
             throw new TicketNotFoundException("Ticket not found");
         }
-        return tickets.get();
+        return tickets;
     }
 
     public List<User> getAllUsers() {
