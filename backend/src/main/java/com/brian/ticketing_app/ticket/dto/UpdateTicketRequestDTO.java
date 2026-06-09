@@ -4,9 +4,7 @@ import com.brian.ticketing_app.ticket.Ticket.TicketPriority;
 import com.brian.ticketing_app.ticket.Ticket.TicketStatus;
 
 import lombok.Getter;
-import lombok.Setter;
 
-@Setter
 @Getter
 public class UpdateTicketRequestDTO {
     private String ticketId;

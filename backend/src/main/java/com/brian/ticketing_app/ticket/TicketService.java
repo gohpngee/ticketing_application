@@ -2,12 +2,16 @@ package com.brian.ticketing_app.ticket;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.brian.ticketing_app.common.exception.ExceptionClasses.TicketNotFoundException;
+import com.brian.ticketing_app.common.exception.ExceptionClasses.UserNotFoundException;
 import com.brian.ticketing_app.ticket.dto.CreateTicketRequestDTO;
 import com.brian.ticketing_app.ticket.dto.UpdateTicketRequestDTO;
+import com.brian.ticketing_app.user.User;
+import com.brian.ticketing_app.user.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.Builder;
@@ -20,15 +24,22 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class TicketService {
     private final TicketRepository ticketRepository;
-
+    private final UserRepository userRepository;
+    
     @Transactional
     public void createTicket(CreateTicketRequestDTO createTicketRequestDTO) {
+        Optional<User> ticketOwner = userRepository.findByUsername(createTicketRequestDTO.getTicketOwnerUsername());
+        if (ticketOwner.isEmpty()) {
+            throw new UserNotFoundException("User not found with id: " + createTicketRequestDTO.getTicketOwnerUsername());
+        }
+
         String newId = "ticket-" + (ticketRepository.count() + 1);
 
         Ticket ticket = Ticket.builder()
             .ticketId(newId)
             .ticketTitle(createTicketRequestDTO.getTicketTitle())
             .ticketDescription(createTicketRequestDTO.getTicketDescription())
+            .ticketOwner(ticketOwner.get())
             .ticketPriority(createTicketRequestDTO.getTicketPriority())
             .ticketStatus(createTicketRequestDTO.getTicketStatus())
             .createdAt(LocalDateTime.now())

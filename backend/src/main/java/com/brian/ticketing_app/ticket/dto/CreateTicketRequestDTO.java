@@ -9,6 +9,7 @@ import lombok.Getter;
 public class CreateTicketRequestDTO {
     private String ticketTitle;
     private String ticketDescription;
+    private String ticketOwnerUsername;
     private TicketPriority ticketPriority;
     private TicketStatus ticketStatus;
 }
