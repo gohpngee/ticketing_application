@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticketing App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+        <header class="topbar">
+            <a href="index.html" class="topbar-brand">Ticketing App</a>
+        </header>
+
+        <main>
+            <h1 class="page-heading">Tickets</h1>
+            <p id="listStatus" class="status-message" aria-live="polite">Loading tickets...</p>
+            <ul id="ticketList" class="ticket-list"></ul>
+        </main>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
